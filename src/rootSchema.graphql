@@ -1,0 +1,30 @@
+#
+# The root schema sets up a query that always returns true. Each data source
+# needs to add its query or queries using the following:
+#
+#    extend type Query {
+#      MyQuery(arg: String): MyResponseType
+#    }
+#
+#    extend type Mutation {
+#      MyMutation(input: MyInputType): MyResponseType
+#    }
+#
+# We declare the Query and Mutation below so that there's a type to extend; if
+# they’re left empty, GraphQL throws errors.
+#
+
+type Query {
+  # Returns the current version of GraMPS.
+  version: String!
+}
+
+type Mutation {
+  # Returns true if the endpoint is live.
+  ping: Boolean!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

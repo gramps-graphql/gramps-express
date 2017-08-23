@@ -1,0 +1,11 @@
+.DS*
+node_modules
+*.log
+.vscode
+
+# Don’t include the built module; npm will do that for us
+dist
+
+# Testing directories
+coverage/
+sonarlint.json

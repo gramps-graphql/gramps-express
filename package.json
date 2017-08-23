@@ -1,0 +1,113 @@
+{
+  "name": "gramps",
+  "version": "0.0.0-semantic-release",
+  "description": "GraphQL Microservice Pattern Server",
+  "main": "src/server.js",
+  "files": [
+    "dist/",
+    "config/",
+    "bin/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https:git@github.com:jlengstorf/gramps.git"
+  },
+  "author": "Jason Lengstorf <jason.lengstorf@ibm.com>",
+  "license": "MIT",
+  "bin": {
+    "gramps": "bin/gramps.js"
+  },
+  "scripts": {
+    "prepush": "npm test",
+    "serve": "BABEL_DISABLE_CACHE=1 nodemon -e js,json,graphql src/server.js --exec babel-node",
+    "prebuild": "del-cli ./dist",
+    "build": "babel src -d dist && cpy '**/*.graphql' '../dist/' --cwd=src --parents",
+    "start": "NODE_ENV=production node dist/server.js",
+    "lint": "eslint src/**",
+    "test": "npm run lint --silent && npm run test:unit --silent",
+    "test:unit": "NODE_ENV=test LOG4JS_LEVEL='OFF' jest --coverage",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+  },
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "body-parser": "^1.17.1",
+    "chalk": "^2.1.0",
+    "dataloader": "^1.3.0",
+    "express": "^4.15.4",
+    "globby": "^6.1.0",
+    "graphql": "^0.10.5",
+    "graphql-apollo-errors": "^2.0.2",
+    "graphql-server-express": "^1.0.2",
+    "graphql-tools": "^1.1.0",
+    "regenerator-runtime": "^0.10.5",
+    "request-promise": "^4.2.1",
+    "shelljs": "^0.7.8",
+    "uuid": "^3.1.0",
+    "yargs": "^8.0.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-eslint": "^7.2.3",
+    "babel-jest": "^20.0.3",
+    "babel-plugin-inline-import": "^2.0.6",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-stage-2": "^6.24.1",
+    "cpy-cli": "^1.0.1",
+    "del-cli": "^1.0.0",
+    "eslint": "^4.2.0",
+    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-config-prettier": "^2.3.0",
+    "eslint-plugin-import": "^2.3.0",
+    "eslint-plugin-prettier": "^2.1.2",
+    "husky": "^0.14.3",
+    "jest": "^20.0.4",
+    "nodemon": "^1.11.0",
+    "prettier": "^1.5.3",
+    "semantic-release": "^6.3.6"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "text",
+      "lcov"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 80,
+        "functions": 80,
+        "lines": 80,
+        "statements": 80
+      }
+    },
+    "moduleNameMapper": {
+      "^.+/app_env\\.json$": "<rootDir>test/__mocks__/app_env.json",
+      "^.+/app_env_private\\.json$": "<rootDir>test/__mocks__/app_env_private.json",
+      "@console/common-healthcheck": "<rootDir>test/__mocks__/common-healthcheck.js",
+      "@console/console-platform-monitor-session-store": "<rootDir>test/__mocks__/console-platform-monitor-session-store.js",
+      "@console/console-platform-nconf": "<rootDir>test/__mocks__/console-platform-nconf.js"
+    },
+    "testMatch": [
+      "<rootDir>{src,test}**/*-test.js"
+    ],
+    "verbose": true
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "keywords": [
+    "graphql"
+  ],
+  "publishConfig": {
+    "access": "restricted",
+    "registry": "https://dev-console-npm.stage1.ng.bluemix.net/"
+  },
+  "release": {
+    "githubUrl": "https://github.ibm.com/",
+    "githubApiPathPrefix": "api/v3",
+    "verifyConditions": "condition-travis-enterprise"
+  }
+}
