@@ -1,8 +1,8 @@
 {
-  "name": "gramps",
+  "name": "@console/gramps",
   "version": "0.0.0-semantic-release",
   "description": "GraphQL Microservice Pattern Server",
-  "main": "src/server.js",
+  "main": "dist/index.js",
   "files": [
     "dist/",
     "config/",
@@ -10,9 +10,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https:git@github.com:jlengstorf/gramps.git"
+    "url": "https:git@github.ibm.com:Bluemix/gramps.git"
   },
-  "author": "Jason Lengstorf <jason.lengstorf@ibm.com>",
+  "contributors": [
+    "Jason Lengstorf <jason.lengstorf@ibm.com>"
+  ],
   "license": "MIT",
   "bin": {
     "gramps": "bin/gramps.js"
