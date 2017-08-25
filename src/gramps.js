@@ -1,11 +1,11 @@
-import { graphqlExpress } from 'graphql-server-express';
+import { graphqlExpress } from 'apollo-server-express';
 
 import { formatError } from './helpers/errors';
 import { getSchema, addMockFunctions } from './lib/configureSchema';
 import loadExternalDataSources from './lib/loadExternalDataSources';
 
 // Export so only one import is required for GrAMPS users.
-export { graphiqlExpress } from 'graphql-server-express';
+export { graphiqlExpress } from 'apollo-server-express';
 
 export const grampsExpress = ({
   dataSources = [],
