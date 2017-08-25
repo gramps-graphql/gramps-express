@@ -10,8 +10,6 @@
     "node": true
   },
   "rules": {
-    "react/jsx-filename-extension": "off",
-    "import/no-named-as-default-member": "off",
     "prettier/prettier": [
       "error",
       {

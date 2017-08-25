@@ -25,12 +25,13 @@
     "prebuild": "del-cli ./dist",
     "build": "babel src -d dist && cpy '**/*.graphql' '../dist/' --cwd=src --parents",
     "start": "NODE_ENV=production node dist/server.js",
-    "lint": "eslint src/**",
+    "lint": "eslint src/**/*.js",
     "test": "npm run lint --silent && npm run test:unit --silent",
     "test:unit": "NODE_ENV=test LOG4JS_LEVEL='OFF' jest --coverage",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
+    "apollo-server-express": "^1.1.2",
     "babel-core": "^6.24.1",
     "body-parser": "^1.17.1",
     "chalk": "^2.1.0",
@@ -39,9 +40,8 @@
     "globby": "^6.1.0",
     "graphql": "^0.10.5",
     "graphql-apollo-errors": "^2.0.2",
-    "graphql-server-express": "^1.0.2",
     "graphql-tools": "^1.1.0",
-    "regenerator-runtime": "^0.10.5",
+    "regenerator-runtime": "^0.11.0",
     "request-promise": "^4.2.1",
     "shelljs": "^0.7.8",
     "uuid": "^3.1.0",
@@ -57,7 +57,7 @@
     "cpy-cli": "^1.0.1",
     "del-cli": "^1.0.0",
     "eslint": "^4.2.0",
-    "eslint-config-airbnb-base": "^11.2.0",
+    "eslint-config-airbnb-base": "^11.3.2",
     "eslint-config-prettier": "^2.3.0",
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-prettier": "^2.1.2",
@@ -65,7 +65,7 @@
     "jest": "^20.0.4",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
-    "semantic-release": "^6.3.6"
+    "semantic-release": "^7.0.2"
   },
   "jest": {
     "coverageReporters": [
@@ -84,15 +84,8 @@
         "statements": 80
       }
     },
-    "moduleNameMapper": {
-      "^.+/app_env\\.json$": "<rootDir>test/__mocks__/app_env.json",
-      "^.+/app_env_private\\.json$": "<rootDir>test/__mocks__/app_env_private.json",
-      "@console/common-healthcheck": "<rootDir>test/__mocks__/common-healthcheck.js",
-      "@console/console-platform-monitor-session-store": "<rootDir>test/__mocks__/console-platform-monitor-session-store.js",
-      "@console/console-platform-nconf": "<rootDir>test/__mocks__/console-platform-nconf.js"
-    },
     "testMatch": [
-      "<rootDir>{src,test}**/*-test.js"
+      "<rootDir>test/**/*-test.js"
     ],
     "verbose": true
   },
