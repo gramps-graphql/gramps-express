@@ -5,12 +5,6 @@ import { grampsExpress, graphiqlExpress } from './index';
 
 const app = express();
 
-app.use((req, res, next) => {
-  // check auth
-
-  next();
-});
-
 app.use(bodyParser.json());
 
 app.all(
@@ -22,7 +16,7 @@ app.all(
 );
 
 app.get(
-  '/graphql/docs',
+  '/graphiql',
   graphiqlExpress({
     endpointURL: '/graphql',
   }),
