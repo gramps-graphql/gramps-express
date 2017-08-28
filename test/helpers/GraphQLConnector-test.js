@@ -12,6 +12,11 @@ jest.mock('request-promise', () =>
   ),
 );
 
+jest.mock('../../src/lib/defaultLogger', () => ({
+  info: jest.fn(),
+  error: jest.fn(),
+}));
+
 const mockRedis = {
   getClient: jest.fn(() => ({
     setex: jest.fn(),
