@@ -41,7 +41,6 @@
     "graphql": "^0.10.5",
     "graphql-apollo-errors": "^2.0.2",
     "graphql-tools": "^1.1.0",
-    "regenerator-runtime": "^0.11.0",
     "request-promise": "^4.2.1",
     "shelljs": "^0.7.8",
     "uuid": "^3.1.0",
@@ -65,7 +64,8 @@
     "jest": "^20.0.4",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
-    "semantic-release": "^7.0.2"
+    "semantic-release": "^7.0.2",
+    "supertest": "^3.0.0"
   },
   "jest": {
     "coverageReporters": [
