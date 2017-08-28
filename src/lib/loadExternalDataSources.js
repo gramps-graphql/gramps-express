@@ -3,9 +3,8 @@ import { EOL } from 'os';
 
 let isUsingExternalData = false;
 
-const getExternalSourcePaths = ({ logger }) => {
+const getExternalSourcePaths = () => {
   const sources = process.env.GQL_DATA_SOURCES || '';
-  logger.info(`sources: ${sources}`);
 
   return sources.split(',').map(s => s.trim());
 };
@@ -69,7 +68,7 @@ const warnInProduction = ({ sources, logger }) => {
 
 // Use the functions we just declared to identify and load any external sources.
 const loadExternalSources = ({ logger }) => {
-  const sources = getExternalSourcePaths({ logger })
+  const sources = getExternalSourcePaths()
     .filter(filterInvalidPath)
     .map(getAbsolutePath)
     .map(loadExternalSource)
