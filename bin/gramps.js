@@ -6,14 +6,6 @@ const shell = require('shelljs');
 const globby = require('globby');
 const babel = require('babel-core');
 const argv = require('yargs')
-  .group('config', 'Add private env vars for development with live data:')
-  .options({
-    config: {
-      alias: 'c',
-      description: 'provide private app env vars for GraphQL',
-      default: '',
-    },
-  })
   .group('data-source-dir', 'Register a data source for mock development:')
   .options({
     'data-source-dir': {
@@ -133,57 +125,11 @@ function getDataSource(rootDir, relSrcDir) {
   return `GQL_DATA_SOURCES=${tmpDir}`;
 }
 
-/**
- * Print an error and fail if no config is supplied in live mode.
- * @param  {string} env  the current env (i.e. "live", "mock")
- * @return {void}
- */
-function requireConfigInLiveMode(env) {
-  if (env !== LIVE_DATA_ENV) {
-    return;
-  }
-
-  const warn = chalk.yellow.bold;
-  shell.echo(warn('\n======================== ERROR ========================'));
-  shell.echo(warn(`   A configuration file is required for running this`));
-  shell.echo(warn(`   module in ${env} mode. For details on the required`));
-  shell.echo(warn(`   config and the format, please read the walkthrough`));
-  shell.echo(warn(`   at https://ibm.biz/graphql-data-source\n`));
-  shell.echo(warn(`   Example:`));
-  shell.echo(warn(`   gramps --live --config ./secret.json`));
-  shell.echo(warn('=======================================================\n'));
-  shell.exit(1);
-}
-
-/**
- * Generates a config env var for running GraphQL in live mode.
- * @param  {string} configFile  path to private env vars config
- * @param  {string} env         the current env (i.e. "live", "mock")
- * @return {string}             env var if set, otherwise an empty string
- */
-function getConfig(configFile, env) {
-  if (!configFile || !shell.test('-f', configFile)) {
-    if (configFile) {
-      shell.echo(chalk.red.bold(`Config file ${configFile} does not exist.`));
-    }
-
-    requireConfigInLiveMode(env);
-
-    return '';
-  }
-
-  const configPath = path.resolve(process.cwd(), configFile);
-
-  shell.echo(chalk.bold(`\nLoaded private env vars from ${configPath}`));
-  return `APP_ENV_PRIVATE=${configPath}`;
-}
-
 // Get the full path to the GraphQL µ-service root directory
 const rootDir = path.resolve(__dirname, '..');
 const env = argv.live ? LIVE_DATA_ENV : MOCK_DATA_ENV;
 const source = getDataSource(rootDir, argv.dataSourceDir);
-const config = getConfig(argv.config, env);
 
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
-shell.exec(`${config} ${source} NODE_ENV=${env} node dist/server.js`);
+shell.exec(`${source} NODE_ENV=${env} node dist/dev/server.js`);
