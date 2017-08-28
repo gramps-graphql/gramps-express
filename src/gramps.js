@@ -68,7 +68,7 @@ export function grampsExpress(
   {
     dataSources = [],
     enableMockData = false,
-    extraContext = () => ({}),
+    extraContext = (req, res) => ({}), // eslint-disable-line no-unused-vars
     logger = console,
     apollo = {},
   } = {},
