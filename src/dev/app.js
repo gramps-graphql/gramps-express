@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-import { grampsExpress, graphiqlExpress } from './index';
+import { grampsExpress, graphiqlExpress } from '../index';
 
 const app = express();
 
@@ -11,6 +11,7 @@ app.all(
   '/graphql',
   grampsExpress({
     dataSources: [],
+    enableMockData: process.env.NODE_ENV !== 'production',
     extraContext: req => ({ req }),
   }),
 );

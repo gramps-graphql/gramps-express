@@ -1,5 +1,3 @@
-// The regenerator runtime is required for async/await calls.
-import 'regenerator-runtime/runtime';
 import { EOL } from 'os';
 
 import app from './app';
