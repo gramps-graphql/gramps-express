@@ -15,13 +15,13 @@
 #
 
 type Query {
-  # Returns the current version of GraMPS.
-  version: String!
+  # Returns the current version of GrAMPS.
+  grampsVersion: String!
 }
 
 type Mutation {
-  # Returns true if the endpoint is live.
-  ping: Boolean!
+  # Returns a charming message from GrAMPS.
+  grampsPing: String!
 }
 
 schema {

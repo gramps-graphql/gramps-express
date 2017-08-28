@@ -4,87 +4,73 @@ import pkg from '../../package.json';
 import rootSchema from '../rootSchema.graphql';
 
 /**
- * Generates an executable schema for use with `graphqlExpress`.
- * @param {array} sources all data sources to be exposed through GraphQL
+ * Reduce an array of data source resolvers into a single object.
+ *
+ * We take a root resolver and one or more type resolvers from each supplied
+ * data source, combines them into a single object, and returns it for use with
+ * makeExecutableSchema. This is how we make the data sources composable.
+ *
+ * This done to keep complicated logic out of the data sources themselves,
+ * in hopes that my suffering will improve your developer experience.
+ *
+ * @param  {string}  type     resolvers to combine (query|mutation|data|mock)
+ * @param  {array}   sources  data sources to combine
+ * @param  {object?} initial  object to use as the reducer’s initial value
+ * @return {object}           the combined resolvers
  */
-export const getSchema = ({ sources, logger, makeExecutableSchemaOptions }) =>
+export const combineResolvers = (type, sources, initial = {}) =>
+  sources.reduce(
+    (combined, source) => ({
+      ...combined,
+      ...source.resolvers[`${type}Resolvers`],
+    }),
+    initial,
+  );
+
+/**
+ * Generates an executable schema for use with `graphqlExpress`.
+ *
+ * @see http://dev.apollodata.com/tools/graphql-tools/generate-schema.html#makeExecutableSchema
+ *
+ * @param  {array}  config.sources  all data sources to be composed
+ * @param  {object} config.logger   a logger for debugging
+ * @param  {object} config.options  options for makeExecutableSchema
+ * @return {object}                 the result of makeExecutableSchema
+ */
+export const getSchema = ({ sources, logger, options }) =>
   makeExecutableSchema({
     // Combine all the schema definitions into an array.
     typeDefs: [rootSchema, ...sources.map(source => source.schema)],
-
-    /*
-     * What’s happening here is painfully complicated logic for taking a root
-     * resolver and one or more type resolvers from each supplied data source,
-     * combining them into a single object, and placing that into the
-     * `resolvers` property.
-     *
-     * I’m doing it this way to keep complicated logic out of the data source
-     * folders, in hopes that my suffering will improve your dev experience.
-     */
     resolvers: {
-      // Reduces the array of source query resolvers into a single object.
-      Query: sources.reduce(
-        (queries, source) => ({
-          ...queries,
-          ...source.resolvers.queryResolvers,
-        }),
-        {
-          // Return the current package version.
-          version: /* istanbul ignore next */ () => pkg.version,
-        },
-      ),
-
-      // Reduces the array of mutation resolvers into a single object.
-      Mutation: sources.reduce(
-        (mutations, source) => ({
-          ...mutations,
-          ...source.resolvers.mutationResolvers,
-        }),
-        {
-          // This is a simple “are you alive” check.
-          ping: /* istanbul ignore next */ () => true,
-        },
-      ),
-
-      // Retrieves the data resolvers, then spreads them into individual objects.
-      ...sources.reduce(
-        (resolvers, source) => ({
-          ...resolvers,
-          ...source.resolvers.dataResolvers,
-        }),
-        {},
-      ),
+      Query: combineResolvers('query', sources, {
+        grampsVersion: /* istanbul ignore next */ () => pkg.version,
+      }),
+      Mutation: combineResolvers('mutation', sources, {
+        grampsPing: /* istanbul ignore next */ () => 'GET OFF MY LAWN',
+      }),
+      ...combineResolvers('data', sources),
     },
 
     logger,
-    ...makeExecutableSchemaOptions,
+    ...options,
   });
 
-export const addMockFunctions = ({
-  sources,
-  schema,
-  enableMockData = process.env.NODE_ENV !== 'production',
-  preserveResolvers = process.env.NODE_ENV !== 'production',
-}) => {
-  // If we’re in local mode, use mock data.
-  /* istanbul ignore else: no else case required */
-  if (enableMockData) {
-    addMockFunctionsToSchema({
-      schema,
-      preserveResolvers,
-
-      // Each data source defines its own mock resolvers, so combine them here.
-      mocks: sources.reduce(
-        (mocks, source) => ({
-          ...mocks,
-
-          // Mock resolvers are not required, so fall back to an empty object.
-          ...(source.resolvers.mockResolvers || {}),
-        }),
-        {},
-      ),
-    });
-  }
+/**
+ * Adds mock resolvers for simulating responses for an array of data sources.
+ *
+ * @see http://dev.apollodata.com/tools/graphql-tools/mocking.html#addMockFunctionsToSchema
+ *
+ * @param  {array}   config.sources            GraphQL data source objects
+ * @param  {object}  config.schema             return from makeExecutableSchema
+ * @param  {boolean} config.preserveResolvers  whether to use resolvers in mocks
+ * @return {object}                            the executable schema
+ */
+export const addMockFunctions = ({ sources, schema, options }) => {
+  addMockFunctionsToSchema({
+    mocks: combineResolvers('mock', sources),
+    schema,
+    ...options,
+  });
 
   return schema;
 };
