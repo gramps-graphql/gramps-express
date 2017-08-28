@@ -1,12 +1,7 @@
-const noop = () => {
-  // no-op so calls to the logger don’t fail
-};
-
+/* eslint-disable no-console */
 const defaultLogger = {
-  info: noop,
-  log: noop,
-  warn: noop,
-  error: msg => console.error(msg), // eslint-disable-line no-console
+  info: msg => console.info(msg),
+  error: msg => console.error(msg),
 };
 
 export default defaultLogger;
