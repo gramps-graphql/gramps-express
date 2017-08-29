@@ -30,8 +30,8 @@ const argv = require('yargs')
   .help()
   .alias('help', 'h').argv;
 
-const LIVE_DATA_ENV = 'production';
-const MOCK_DATA_ENV = 'development';
+const LIVE_DATA_ENV = 'live';
+const MOCK_DATA_ENV = 'mock';
 
 /**
  * Prints a notice to the console when using mock data sources.
@@ -112,12 +112,12 @@ function getDataSource(rootDir, relSrcDir) {
   const srcDir = path.join(process.cwd(), relSrcDir);
   const tmpDir = path.join(rootDir, '.tmp');
 
-  shell.echo(`Loading %{srcDir}`);
+  shell.echo(`Loading ${srcDir}`);
 
   printDevWarning(srcDir, tmpDir);
   makeTmpDir(tmpDir);
-  copyGQL(path.join(srcDir, 'src/*.graphql'), tmpDir);
-  transpileJS(path.join(srcDir, 'src/*.js'), tmpDir);
+  copyGQL(path.join(srcDir, '{src,}/*.graphql'), tmpDir);
+  transpileJS(path.join(srcDir, '{src,}/*.js'), tmpDir);
 
   shell.echo(chalk.bold('\r\nWe’ve got ourselves a data source, folks.'));
   shell.echo(chalk.bold('Who’s ready to party? 🎉'));
@@ -132,4 +132,4 @@ const source = getDataSource(rootDir, argv.dataSourceDir);
 
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
-shell.exec(`${source} NODE_ENV=${env} node dist/dev/server.js`);
+shell.exec(`${source} GRAMPS_MODE=${env} node dist/dev/server.js`);
