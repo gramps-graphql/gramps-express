@@ -150,7 +150,7 @@ export const formatError = (logger = console) =>
  * @param  {string?}        config.docsLink        link to help docs
  * @return {Error}                                 SevenBoom error for output
  */
-export const GrampsError = (
+export function GrampsError(
   {
     error = false,
     statusCode = false,
@@ -162,7 +162,7 @@ export const GrampsError = (
     targetEndpoint = null,
     docsLink = null,
   } = {},
-) => {
+) {
   const httpErrorCode = statusCode || error.statusCode || 500;
 
   // If we’re wrapping an error, the function and first three arguments change.
@@ -182,4 +182,4 @@ export const GrampsError = (
 
   // Call the function and spread the args array into individual arguments.
   return SevenBoom[fn](...args);
-};
+}
