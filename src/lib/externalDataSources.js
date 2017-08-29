@@ -67,7 +67,7 @@ const warnInProduction = ({ sources, logger }) => {
 };
 
 // Use the functions we just declared to identify and load any external sources.
-const loadExternalSources = ({ logger }) => {
+export const loadDevDataSources = ({ logger }) => {
   const sources = getExternalSourcePaths()
     .filter(filterInvalidPath)
     .map(getAbsolutePath)
@@ -81,4 +81,35 @@ const loadExternalSources = ({ logger }) => {
   return sources;
 };
 
-export default loadExternalSources;
+const getDataSourceContextArray = sources =>
+  sources.reduce((arr, src) => [...arr, src.context], []);
+
+const warnForOverrides = ({ overrides, logger }) => {
+  if (!overrides.length) {
+    return;
+  }
+
+  const message = [
+    `${EOL}========================= WARNING ==========================`,
+    `     Existing data sources have been overridden by`,
+    `     development-only data sources. This WILL NOT work`,
+    `     in production environments.`,
+    ``,
+    `     These data sources are running in dev-only mode:`,
+    `     - ${overrides.join(`${EOL}     - `)}`,
+    ``,
+    `     Details: https://ibm.biz/graphql-data-source`,
+    `============================================================${EOL}`,
+  ];
+
+  logger.warn(message.join(EOL));
+};
+
+export const overrideLocalSources = ({ sources, devSources, logger }) => {
+  const overrides = getDataSourceContextArray(devSources);
+  const notOverridden = sources.filter(src => !overrides.includes(src.context));
+
+  warnForOverrides({ overrides, logger });
+
+  return [...notOverridden, ...devSources];
+};
