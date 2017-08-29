@@ -10,6 +10,14 @@ describe('lib/defaultLogger', () => {
     expect(console.info).toHaveBeenCalledWith('info test');
   });
 
+  it('uses the console for warn logging', () => {
+    console.warn = jest.fn();
+
+    defaultLogger.warn('warn test');
+
+    expect(console.warn).toHaveBeenCalledWith('warn test');
+  });
+
   it('uses the console for error logging', () => {
     console.error = jest.fn();
 
