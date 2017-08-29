@@ -38,7 +38,7 @@ describe('lib/graphql/errors', () => {
     it('prints a detailed server log', () => {
       const spy = jest.spyOn(defaultLogger, 'error');
 
-      printDetailedServerLog(defaultLogger)(mockError);
+      errors.printDetailedServerLog(defaultLogger)(mockError);
 
       expect(spy).toHaveBeenCalledWith(
         expect.stringMatching(/Error: error description \(1234\)/),
@@ -72,7 +72,7 @@ describe('lib/graphql/errors', () => {
 
       delete mockErrorNoData.data;
 
-      printDetailedServerLog(defaultLogger)(mockErrorNoData);
+      errors.printDetailedServerLog(defaultLogger)(mockErrorNoData);
 
       expect(spy).not.toHaveBeenCalledWith(expect.stringMatching(/Data:/));
     });
@@ -83,7 +83,7 @@ describe('lib/graphql/errors', () => {
 
       delete mockErrorNoDescription.output.payload.description;
 
-      printDetailedServerLog(defaultLogger)(mockErrorNoDescription);
+      errors.printDetailedServerLog(defaultLogger)(mockErrorNoDescription);
 
       expect(mockErrorNoDescription.output.payload.message).toEqual(
         'error message',
@@ -100,7 +100,9 @@ describe('lib/graphql/errors', () => {
       delete mockErrorNoDescriptionOrMessage.output.payload.description;
       delete mockErrorNoDescriptionOrMessage.output.payload.message;
 
-      printDetailedServerLog(defaultLogger)(mockErrorNoDescriptionOrMessage);
+      errors.printDetailedServerLog(defaultLogger)(
+        mockErrorNoDescriptionOrMessage,
+      );
 
       expect(spy).toHaveBeenCalledWith(
         expect.stringMatching(/Error: something went wrong/),
@@ -122,7 +124,7 @@ describe('lib/graphql/errors', () => {
     };
 
     it('returns useful client-side errors', () => {
-      expect(formatClientErrorData(mockClientError)).toEqual({
+      expect(errors.formatClientErrorData(mockClientError)).toEqual({
         statusCode: 401,
         error: 'Unauthorized',
         message: 'error message',
@@ -141,7 +143,7 @@ describe('lib/graphql/errors', () => {
       // This method mutates data, so we need a fresh copy.
       const productionMockError = { ...mockClientError };
 
-      expect(formatClientErrorData(productionMockError)).toEqual({
+      expect(errors.formatClientErrorData(productionMockError)).toEqual({
         statusCode: 401,
         error: 'Unauthorized',
         message: 'error message',
@@ -159,7 +161,7 @@ describe('lib/graphql/errors', () => {
 
       delete mockErrorNoDescription.description;
 
-      expect(formatClientErrorData(mockErrorNoDescription)).toEqual({
+      expect(errors.formatClientErrorData(mockErrorNoDescription)).toEqual({
         statusCode: 401,
         error: 'Unauthorized',
         description: 'error message',

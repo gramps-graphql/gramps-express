@@ -1,12 +1,9 @@
-import * as apollo from 'apollo-server-express';
-
-import { grampsExpress } from '../src/gramps';
+import grampsExpress from '../src/gramps';
 import * as cfg from '../src/lib/configureSchema';
 
 // Stub out the functions that are tested elsewhere.
 cfg.getSchema = jest.fn(opts => opts);
 cfg.addMockFunctions = jest.fn();
-apollo.graphqlExpress = jest.fn();
 
 describe('GrAMPS', () => {
   beforeEach(() => {
@@ -16,26 +13,20 @@ describe('GrAMPS', () => {
   describe('grampsExpress()', () => {
     it('properly configures a schema when called with no options', () => {
       /*
-       * This is a little clever: `graphqlExpress` accepts a function as its
-       * argument, so we capture that function, assign the return value to a
-       * variable, and check that it has the expected shape.
+       * Since GrAMPS is Express middleware, we want to simulate the result of
+       * calling it in the Express pipeline.
        */
-      let mockReturn;
-      apollo.graphqlExpress = jest.fn(fn => {
-        mockReturn = fn({}, {});
-      });
+      const mockReq = {};
+      grampsExpress()(mockReq, {}, jest.fn());
 
-      grampsExpress();
-
+      expect(cfg.addMockFunctions).toHaveBeenCalled();
       expect(cfg.getSchema).toHaveBeenCalledWith({
         sources: [],
         logger: console,
         options: {},
       });
 
-      expect(cfg.addMockFunctions).not.toHaveBeenCalled();
-      expect(apollo.graphqlExpress).toHaveBeenCalled();
-      expect(mockReturn).toEqual(
+      expect(mockReq.gramps).toEqual(
         expect.objectContaining({
           context: {},
           formatError: expect.any(Function),
@@ -44,44 +35,10 @@ describe('GrAMPS', () => {
       );
     });
 
-    it('throws an error if a context option is supplied for graphqlExpress', () => {
-      const shouldThrow = () => {
-        grampsExpress({
-          apollo: {
-            graphqlExpress: {
-              context: {
-                shouldFail: true,
-              },
-            },
-          },
-        });
-      };
+    it('does not add mock functions when the enableMockData flag is false', () => {
+      grampsExpress({ enableMockData: false });
 
-      expect(shouldThrow).toThrowError(/Cannot set context directly/);
-    });
-
-    it('throws an error if a schema option is supplied for graphqlExpress', () => {
-      const shouldThrow = () => {
-        grampsExpress({
-          apollo: {
-            graphqlExpress: {
-              schema: {
-                shouldFail: true,
-              },
-            },
-          },
-        });
-      };
-
-      expect(shouldThrow).toThrowError(/Cannot set schema directly/);
-    });
-
-    it('adds mock functions when the enableMockData flag is true', () => {
-      grampsExpress({
-        enableMockData: true,
-      });
-
-      expect(cfg.addMockFunctions).toHaveBeenCalled();
+      expect(cfg.addMockFunctions).not.toHaveBeenCalled();
     });
 
     it('properly combines contexts', () => {
@@ -90,14 +47,10 @@ describe('GrAMPS', () => {
         { context: 'Bar', model: { bar: 'test' } },
       ];
 
-      let mockReturn;
-      apollo.graphqlExpress = jest.fn(fn => {
-        mockReturn = fn({}, {});
-      });
+      const mockReq = {};
+      grampsExpress({ dataSources })(mockReq, {}, jest.fn());
 
-      grampsExpress({ dataSources });
-
-      expect(mockReturn.context).toEqual({
+      expect(mockReq.gramps.context).toEqual({
         Foo: {
           foo: 'test',
         },
@@ -108,14 +61,15 @@ describe('GrAMPS', () => {
     });
 
     it('properly adds extra context', () => {
-      let mockReturn;
-      apollo.graphqlExpress = jest.fn(fn => {
-        mockReturn = fn({}, {});
-      });
+      const mockReq = {};
+      grampsExpress({ extraContext: () => ({ extra: 'test' }) })(
+        mockReq,
+        {},
+        jest.fn(),
+      );
+      grampsExpress();
 
-      grampsExpress({ extraContext: () => ({ extra: 'test' }) });
-
-      expect(mockReturn.context).toEqual({
+      expect(mockReq.gramps.context).toEqual({
         extra: 'test',
       });
     });
