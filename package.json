@@ -1,5 +1,5 @@
 {
-  "name": "@console/gramps",
+  "name": "@gramps/gramps-express",
   "version": "0.0.0-semantic-release",
   "description": "GraphQL Microservice Pattern Server",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https:git@github.ibm.com:Bluemix/gramps.git"
+    "url": "https:git@github.com:gramps-graphql/gramps-express.git"
   },
   "contributors": [
     "Jason Lengstorf <jason.lengstorf@ibm.com>"
@@ -95,15 +95,7 @@
     "test": "test"
   },
   "keywords": [
-    "graphql"
-  ],
-  "publishConfig": {
-    "access": "restricted",
-    "registry": "https://dev-console-npm.stage1.ng.bluemix.net/"
-  },
-  "release": {
-    "githubUrl": "https://github.ibm.com/",
-    "githubApiPathPrefix": "api/v3",
-    "verifyConditions": "condition-travis-enterprise"
-  }
+    "graphql",
+    "apollo"
+  ]
 }
