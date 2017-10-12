@@ -73,7 +73,10 @@ export default class GraphQLConnector {
     new Promise((resolve, reject) => {
       this.logger.info(`Request made to ${uri}`);
       const toHash = `${uri}-${this.headers.Authorization}`;
-      const key = crypto.createHash('md5').update(toHash).digest('hex');
+      const key = crypto
+        .createHash('md5')
+        .update(toHash)
+        .digest('hex');
       const hasCache = this.enableCache && this.getCached(key, resolve, reject);
 
       this.request(this.getRequestConfig(uri))
