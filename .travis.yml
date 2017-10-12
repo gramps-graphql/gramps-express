@@ -1,27 +1,19 @@
-dist: trusty
-sudo: false
 language: node_js
-node_js:
-- "6"
-- "7"
-- "8"
-install:
-- npm install
-script:
-- npm test
-after_success:
-- npm run build
-- npm run semantic-release
 cache:
   directories:
-  - node_modules
-branches:
-  only:
-  - master
+    - node_modules
 notifications:
   email: false
-  slack:
-    rooms:
-      secure: uPtI+syOyuJuzX+k7agHoWnVu32M3hHyrXjO8oZX71TgRbPOpDcGUOJvGmwrtumoRv63qPmXFnlF8657fFn/8fjF6DOe99X9KVmhSy+JELUy953pOM70yLcHVxVNRytrHKG2UJQCq0BCaNb4xoCG4hU/OdCanEK2zJRM0rXNKqnibyAGFiSL87qYA0EgKSeQX/FdzAHz2E+rBw9EYNCyYEzcQPMkL7wGS2+Y7+yzZfSgU7AtFqsHmDWaqWeUwvCLIMtpYncrqIf3YDKgYT5Z4IDe431rLUvf46RTVUcPdJvXnp0hawktxkA405SIfp3TcxKgLAV1yGUzJDfiVVjRgwF7UCiazNMvW7Md7jVgRcUVfZxMEl5KPpq7ATPV2IaAFbazElAiQn+lBCLGYWA5d/rc8BMptMpimxEG6/mTb7D54bD/lgYfAnlpaD4LgKfBd4fcvAIcwvJYp8e2311wujtmLGFVUpQBq8AWPyN6qbT4HQl07O27B6m6FHH72lwwWCoMA8JtpZc+vuTDmb0Qd8GAD4QCABxnjFHYKuyGc+TvJxKktXR7hweo5SdjHZGAMzaAYKFC503gDLkLUDR1CFXfDqL1Bklg1o7LTiifyT/qZq3yXvZI1KoKOilLlo5DezXrLP0ofALS0Ss2xXXDe0hIK7YE3vMo1ePlAiDMPSQ=
-    on_success: change
-    on_failure: change
+node_js:
+  - '8'
+  - '7'
+  - '6'
+  - '4'
+before_script:
+  - npm prune
+after_success:
+  - npm run build
+  - npm run semantic-release
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
