@@ -1,6 +1,6 @@
 {
   "name": "@gramps/gramps-express",
-  "version": "0.0.0-semantic-release",
+  "version": "0.0.0-development",
   "description": "GraphQL Microservice Pattern Server",
   "main": "dist/index.js",
   "files": [
@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https:git@github.com:gramps-graphql/gramps-express.git"
+    "url": "https://github.com/gramps-graphql/gramps-express.git"
   },
   "contributors": [
     "Jason Lengstorf <jason.lengstorf@ibm.com>"
@@ -65,7 +65,7 @@
     "jest": "^20.0.4",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
-    "semantic-release": "^7.0.2",
+    "semantic-release": "^8.0.3",
     "supertest": "^3.0.0"
   },
   "jest": {

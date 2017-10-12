@@ -15,7 +15,7 @@ const QUERY_RESPONSE_MOCK = {
 
 const QUERY_RESPONSE_LIVE = {
   data: {
-    grampsVersion: '0.0.0-semantic-release',
+    grampsVersion: '0.0.0-development',
   },
 };
 
@@ -50,7 +50,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'development';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).get('/graphql').query(QUERY);
+      const response = await request(app)
+        .get('/graphql')
+        .query(QUERY);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(QUERY_RESPONSE_MOCK);
@@ -62,7 +64,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'production';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).get('/graphql').query(QUERY);
+      const response = await request(app)
+        .get('/graphql')
+        .query(QUERY);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(QUERY_RESPONSE_LIVE);
@@ -74,7 +78,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'development';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).post('/graphql').send(QUERY);
+      const response = await request(app)
+        .post('/graphql')
+        .send(QUERY);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(QUERY_RESPONSE_MOCK);
@@ -86,7 +92,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'production';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).post('/graphql').send(QUERY);
+      const response = await request(app)
+        .post('/graphql')
+        .send(QUERY);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(QUERY_RESPONSE_LIVE);
@@ -98,7 +106,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'development';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).post('/graphql').send(MUTATION);
+      const response = await request(app)
+        .post('/graphql')
+        .send(MUTATION);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(MUTATION_RESPONSE_MOCK);
@@ -110,7 +120,9 @@ describe('dev/app', () => {
       process.env.NODE_ENV = 'production';
       const app = require('../../src/dev/app').default;
 
-      const response = await request(app).post('/graphql').send(MUTATION);
+      const response = await request(app)
+        .post('/graphql')
+        .send(MUTATION);
 
       expect(response.statusCode).toBe(200);
       expect(response.body).toEqual(MUTATION_RESPONSE_LIVE);
