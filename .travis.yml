@@ -3,18 +3,17 @@ cache:
   directories:
   - node_modules
 node_js:
-- '6'
-- '7'
-- '8'
+- "6"
+- "7"
+- "8"
 notifications:
   email: false
 before_script:
 - npm prune
 after_success:
 - npm i codacy-coverage
-- npm run build
-- npm test -- --coverage
-- cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
+- ls ./coverage
+- cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
 - rm -rf ./coverage
 jobs:
   include:
