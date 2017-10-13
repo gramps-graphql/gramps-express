@@ -8,19 +8,24 @@ node_js:
 - '6'
 - '7'
 - '8'
-before_script:
-- npm prune
-- npm i codacy-coverage
-after_success:
-- npm run build
-- npm run semantic-release
-- npm test -- --coverage
-- cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
-- rm -rf ./coverage
+jobs:
+  include:
+  - stage: test
+    before_script:
+    - npm prune
+    - npm i codacy-coverage
+    after_success:
+    - npm run build
+    - npm run semantic-release
+    - npm test -- --coverage
+    - cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
+    - rm -rf ./coverage
+  - stage: deploy
+    script: npm run build && npm run semantic-release
 branches:
   only:
   - master
-  - /^greenkeeper/.*$/
+  - "/^greenkeeper/.*$/"
 env:
   global:
-    secure: GC9Q+9+h80eX2z3RE642lkO8hqEVAJLOD3bq33Uo3NtB4iE+naNZfpyhhdpZaLZf1DlqHEaPNOvMHmX6PxoVneXuEasaooJhax1dXhdzHBcZc6CjV/H19qr3+kSSu4vWIdqfX+8LIwPf3weR+d7PSvs+RFnFNeS6NRWgX9Hpmg4e5KHxzvhRxjX3DEhQ9+ixKWt80GozYqbc/dIF76f5x8kc9XH98sXn3X60NMlV7dDCuvqJnXN2T2mA9+bFTdnRfa86PmNbm8E9O9vg0Q2EgzAw5/MV1R6kHpaa0gUjkSgu0pQCQMQ96wo66YWa0cPHxScE53bIAHeqlZ3lwXDhOeTVeLac9xKW8vYDwmra75MOpKcuZTu10HW6PxzioJ43PJ2HVKkmcWVMOgpAcOeD9SiUj96/xmPXU0IN7EFWbdTW0qukoVL5Mn9jbOpdLbmZXddjF+ks/STvG0AW2cER4Cr6631vLANtwxLGhivBMujgJ9c43+EOAtl685zOCFRoWP5rI+la4elLwzvfaOidrtBncBJKPE2WVx+InLPxBOe9lLzniBgA0q0gdHWgnRuROfcQd0jUjomk/qjZ4q8u87e8pVCT6UA3YqJcBuCv8cljks0Ennbb+LbJjfQTGASwPOBlocAjloW6F8T3GvY+jZRoC0mBcJWHXd4sMmK8JEo=
+    secure: Y7CCsj1gAYuQ9xMarN31ltryv5OeREgAowl0FvBgHH/sC+bB2rw4eOQB4Qkm7lVACbJRd3CNfI0OrTmwdEGpTN5b3FJ1x6V0T7xv/76AdBzTvJ9fH7lH4SDIo4tUAT9CFPi263xPae337r7FuldoLFQzW/j3y5DnejYtKZaOokwELJLytFwLC6rLHXfrFeXHkItuMK3DfKmJAp4AIjVSSjpLPcdzZsxvf6POeX7Dw1jbk2PmApTY80x25HLdpGQHryw2oIBdImfmfsIlF0i1593P23bOlcxXtcRpsrbhkKlHc8Lw5xcj6JsfJ3VxXdawplw6GPrJ6CWJUhcOuYvv0D1CdfuucGECtD1DFppvqU9oZGs6pzQu20NYbn4snLYWQqyWWC2FEs8SkAK2aXF8klATDfrLcD9u+p2FQMW3nJq8xj/rzM1mnzWgdMCVwgCsQg8esTI9c0u3J2I1CJ1wWqrqONsQ7uhsfe12uwGVqlIvNM9I6RTc9PTCCtspuR0jErZc8sRJKXDExzoI/BCxlpVTGtwlboV02fyB4w3PYKFAAQ3D83ks7nKLJ75zKErBLSiFJWF0/z8nMOffq+HcXbr5PP1ycvVHQvZ7WjDUxMuvsUsUYmPZZ81bLc9lIDuvnxTRq+nP8EqsOHwsaARcu+QSYAGV/wklIUP/mWC9Cm4=
