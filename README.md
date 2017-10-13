@@ -1,5 +1,7 @@
 # GrAMPS — An Easier, More Stable GraphQL Server
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/gramps-graphql/gramps-express.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/gramps-graphql/gramps-express.svg?branch=master)](https://travis-ci.org/gramps-graphql/gramps-express) [![Maintainability](https://api.codeclimate.com/v1/badges/a4e96a80f4fcfae53537/maintainability)](https://codeclimate.com/github/gramps-graphql/gramps-express/maintainability)
 
 **Gr**aphQL **A**pollo **M**icroservice **P**attern **S**erver
