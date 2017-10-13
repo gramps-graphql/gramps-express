@@ -2,28 +2,24 @@ language: node_js
 cache:
   directories:
   - node_modules
+node_js:
+- '6'
+- '7'
+- '8'
 notifications:
   email: false
-stages:
-- test
-- name: deploy
-  if: branch = master
+before_script:
+- npm prune
+after_success:
+- npm i codacy-coverage
+- npm run build
+- npm test -- --coverage
+- cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
+- rm -rf ./coverage
 jobs:
   include:
-  - stage: test
-    node_js:
-    - '6'
-    - '7'
-    - '8'
-    before_script:
-    - npm prune
-    after_success:
-    - npm i codacy-coverage
-    - npm run build
-    - npm test -- --coverage
-    - cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
-    - rm -rf ./coverage
   - stage: deploy
+    if: branch = master AND NOT type = pull_request
     node_js: "8"
     script: npm run build && npm run semantic-release
 branches:
