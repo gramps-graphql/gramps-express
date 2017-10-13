@@ -12,8 +12,7 @@ before_script:
 - npm prune
 after_success:
 - npm i codacy-coverage
-- ls ./coverage
-- cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
+- cat ./coverage/lcov.info | CODACY_VERBOSE=1 ./node_modules/.bin/codacy-coverage
 - rm -rf ./coverage
 jobs:
   include:
