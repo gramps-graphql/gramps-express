@@ -21,6 +21,7 @@ jobs:
     - cat ./coverage/lcov.info | $(npm bin)/codacy-coverage
     - rm -rf ./coverage
   - stage: deploy
+    node_js: "8"
     script: npm run build && npm run semantic-release
 branches:
   only:
