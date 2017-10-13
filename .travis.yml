@@ -12,11 +12,6 @@ jobs:
   include:
   - stage: cleanup
     script: npm prune
-  - stage: prep
-    script: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-      > ./cc-test-reporter
-  - script: chmod +x ./cc-test-reporter
-  - script: "./cc-test-reporter before-build"
   - stage: test
     script: npm test
   - stage: build
@@ -25,7 +20,8 @@ jobs:
     if: branch = master
     script: npm run semantic-release
   - stage: analyze
-    script: "./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT"
+    script: npm i -g codacy-coverage
+  - script: npm test -- --coverage && cat ./coverage/lcov.info | codacy-coverage && rm -rf ./coverage
 branches:
   only:
   - master
