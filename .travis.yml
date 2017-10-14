@@ -15,12 +15,9 @@ before_script:
 - ./cc-test-reporter before-build
 after_script:
 - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
-jobs:
-  include:
-  - stage: deploy
-    if: branch = master AND NOT type = pull_request
-    node_js: "8"
-    after_success: npm run build && npm run semantic-release
+after_success:
+- npm run build
+- npm run semantic-release
 branches:
   only:
   - master
