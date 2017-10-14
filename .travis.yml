@@ -10,20 +10,21 @@ notifications:
   email: false
 before_script:
 - npm prune
-after_success:
-- npm i codacy-coverage
-- cat ./coverage/lcov.info | ./node_modules/.bin/codacy-coverage
-- rm -rf ./coverage
+- curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+- chmod +x ./cc-test-reporter
+- ./cc-test-reporter before-build
+after_script:
+- ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
 jobs:
   include:
   - stage: deploy
     if: branch = master AND NOT type = pull_request
     node_js: "8"
-    script: npm run build && npm run semantic-release
+    after_success: npm run build && npm run semantic-release
 branches:
   only:
   - master
   - "/^greenkeeper/.*$/"
 env:
   global:
-    secure: Y7CCsj1gAYuQ9xMarN31ltryv5OeREgAowl0FvBgHH/sC+bB2rw4eOQB4Qkm7lVACbJRd3CNfI0OrTmwdEGpTN5b3FJ1x6V0T7xv/76AdBzTvJ9fH7lH4SDIo4tUAT9CFPi263xPae337r7FuldoLFQzW/j3y5DnejYtKZaOokwELJLytFwLC6rLHXfrFeXHkItuMK3DfKmJAp4AIjVSSjpLPcdzZsxvf6POeX7Dw1jbk2PmApTY80x25HLdpGQHryw2oIBdImfmfsIlF0i1593P23bOlcxXtcRpsrbhkKlHc8Lw5xcj6JsfJ3VxXdawplw6GPrJ6CWJUhcOuYvv0D1CdfuucGECtD1DFppvqU9oZGs6pzQu20NYbn4snLYWQqyWWC2FEs8SkAK2aXF8klATDfrLcD9u+p2FQMW3nJq8xj/rzM1mnzWgdMCVwgCsQg8esTI9c0u3J2I1CJ1wWqrqONsQ7uhsfe12uwGVqlIvNM9I6RTc9PTCCtspuR0jErZc8sRJKXDExzoI/BCxlpVTGtwlboV02fyB4w3PYKFAAQ3D83ks7nKLJ75zKErBLSiFJWF0/z8nMOffq+HcXbr5PP1ycvVHQvZ7WjDUxMuvsUsUYmPZZ81bLc9lIDuvnxTRq+nP8EqsOHwsaARcu+QSYAGV/wklIUP/mWC9Cm4=
+    - CC_TEST_REPORTER_ID=d8f5e73d0ee3db18fb0ce70d5ed430f91e5bbdea75080f85991d27aeb715f3c8
