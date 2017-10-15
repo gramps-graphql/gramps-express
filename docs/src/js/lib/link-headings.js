@@ -15,16 +15,17 @@ import zipObj from 'ramda/src/zipObj';
 const getElementById = document.getElementById.bind(document);
 const getElements = document.querySelectorAll.bind(document);
 const getDescendantSelector = isDirectOnly => (isDirectOnly ? '>' : ' ');
-const getSelectorScope = (descendantLimit, scope) => `${scope}${descendantLimit}`;
+const getSelectorScope = (descendantLimit, scope) =>
+  `${scope}${descendantLimit}`;
 const getScope = useWith(getSelectorScope, [getDescendantSelector, identity]);
 const buildSelector = curry((prefix, element) => `${prefix}${element}`);
 const getSelectorTemplate = compose(buildSelector, getScope);
 const getSelectorList = compose(join(','), map);
 
 // These functions create anchor links for elements.
-const buildAnchorLink = curry((linkClass, id, text) => (
-  `<a class="${linkClass}" href="#${id}">${text}</a>`
-));
+const buildAnchorLink = curry(
+  (linkClass, id, text) => `<a class="${linkClass}" href="#${id}">${text}</a>`,
+);
 
 // These functions have side-effects, so we quarantine them here.
 const unsafe = {
@@ -35,13 +36,18 @@ const unsafe = {
 };
 
 // This function exposes a public API so people can, y’know, _use_ this module.
-export default function initialize({
-  elementsToTarget = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-  limitToScope = 'body',
-  limitToDirectDescendants = false,
-  linkClass = 'link-headings__permalink',
-} = {}) {
-  const templateFunc = getSelectorTemplate(limitToDirectDescendants, limitToScope);
+export default function initialize(
+  {
+    elementsToTarget = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+    limitToScope = 'body',
+    limitToDirectDescendants = false,
+    linkClass = 'link-headings__permalink',
+  } = {},
+) {
+  const templateFunc = getSelectorTemplate(
+    limitToDirectDescendants,
+    limitToScope,
+  );
   const linkTemplateFunc = buildAnchorLink(linkClass);
   const getLinksAsKeyedObj = converge(zipObj, [
     map(head),
