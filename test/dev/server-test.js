@@ -8,6 +8,10 @@ jest.mock('../../src/dev/app', () => ({
   listen: jest.fn((port, fn) => fn()),
 }));
 
+jest.mock('../../src/lib/defaultLogger', () => ({
+  info: jest.fn(),
+}));
+
 describe('dev/server', () => {
   it('sets the port appropriately', () => {
     expect(app.set).toHaveBeenCalledWith('port', 8080);
