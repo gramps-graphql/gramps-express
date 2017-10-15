@@ -1,5 +1,6 @@
 import { EOL } from 'os';
 
+import logger from '../lib/defaultLogger';
 import app from './app';
 
 // Get the port from the various places it can be set
@@ -15,5 +16,5 @@ app.listen(app.get('port'), () => {
     `    GraphiQL: http://localhost:${port}/graphiql`,
     `============================================================${EOL}`,
   ];
-  console.info(message.join(EOL)); // eslint-disable-line no-console
+  logger.info(message.join(EOL)); // eslint-disable-line no-console
 });
