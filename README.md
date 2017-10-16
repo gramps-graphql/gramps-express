@@ -1,10 +1,10 @@
-# GrAMPS · [![npm version](https://img.shields.io/npm/v/@gramps/gramps-express.svg?style=flat)](https://www.npmjs.com/package/@gramps/gramps-express) [![Build Status](https://travis-ci.org/gramps-graphql/gramps-express.svg?branch=master)](https://travis-ci.org/gramps-graphql/gramps-express) [![Maintainability](https://api.codeclimate.com/v1/badges/ac264833fac1fbd1afe0/maintainability)](https://codeclimate.com/github/gramps-graphql/gramps-express/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ac264833fac1fbd1afe0/test_coverage)](https://codeclimate.com/github/gramps-graphql/gramps-express/test_coverage) [![Greenkeeper badge](https://badges.greenkeeper.io/gramps-graphql/gramps-express.svg)](https://greenkeeper.io/)
+<img src="https://gramps-graphql.github.io/gramps-express/assets/img/gramps-banner.png" alt="GrAMPS · An easier way to manage the data sources powering your GraphQL server" width="450">
 
-**Gr**aphQL **A**pollo **M**icroservice **P**attern **S**erver
+[![Build Status](https://travis-ci.org/gramps-graphql/gramps-express.svg?branch=master)](https://travis-ci.org/gramps-graphql/gramps-express) [![Maintainability](https://api.codeclimate.com/v1/badges/ac264833fac1fbd1afe0/maintainability)](https://codeclimate.com/github/gramps-graphql/gramps-express/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/ac264833fac1fbd1afe0/test_coverage)](https://codeclimate.com/github/gramps-graphql/gramps-express/test_coverage) [![npm version](https://img.shields.io/npm/v/@gramps/gramps-express.svg?style=flat)](https://www.npmjs.com/package/@gramps/gramps-express) [![Greenkeeper badge](https://badges.greenkeeper.io/gramps-graphql/gramps-express.svg)](https://greenkeeper.io/)
 
-An easier way to manage the data sources powering your GraphQL server.
+**An easier way to manage the data sources powering your GraphQL server.**
 
-GrAMPS is middleware designed for [apollo-server-express](https://git.io/vd1wc)
+**GrAMPS** (short for **Gr**aphQL **A**pollo **M**icroservice **P**attern **S**erver) is middleware designed for [apollo-server-express](https://git.io/vd1wc)
 that allows data sources — a schema, resolvers, and data access model — to be 
 composed into a single GraphQL schema, while keeping the code within each data 
 source isolated, independently testable, and completely decoupled from the rest 
