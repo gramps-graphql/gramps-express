@@ -30,6 +30,30 @@ const mockError = {
 };
 
 describe('lib/graphql/errors', () => {
+  describe('handleQueryErrors()', () => {
+    it('wraps GraphQL syntax errors properly', () => {
+      const graphqlError = new Error();
+
+      graphqlError.message = 'GraphQL syntax error';
+      graphqlError.locations = [{ line: 2, column: 3 }];
+
+      const err = errors.handleQueryErrors(graphqlError);
+
+      expect(err.isBoom).toBe(true);
+      expect(err.output.payload.description).toBe(graphqlError.message);
+      expect(err.locations).toBe(graphqlError.locations);
+      expect(err.output.payload.errorCode).toBe('GRAPHQL_ERROR');
+    });
+
+    it('passes through Boom errors as-is', () => {
+      const mockBoomError = {
+        isBoom: true,
+      };
+
+      expect(errors.handleQueryErrors(mockBoomError)).toBe(mockBoomError);
+    });
+  });
+
   describe('printDetailedServerLog()', () => {
     beforeEach(() => {
       jest.clearAllMocks();
@@ -172,6 +196,17 @@ describe('lib/graphql/errors', () => {
         guid: '1234',
       });
     });
+
+    it('swaps double quotes for single quotes to avoid gross formatting', () => {
+      const mockErrorQuotes = {
+        ...mockClientError,
+        description: 'This has "quotes" in it.',
+      };
+
+      expect(errors.formatClientErrorData(mockErrorQuotes).description).toEqual(
+        expect.stringMatching(/This has 'quotes' in it./),
+      );
+    });
   });
 
   describe('formatError()', () => {
@@ -183,6 +218,7 @@ describe('lib/graphql/errors', () => {
       const arg = apolloErrors.formatErrorGenerator.mock.calls[0][0];
 
       expect(Object.keys(arg.hooks)).toEqual([
+        'onOriginalError',
         'onProcessedError',
         'onFinalError',
       ]);
