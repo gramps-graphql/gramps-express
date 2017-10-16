@@ -118,7 +118,7 @@ const formatDetailsArray = (fields, error) =>
  * @param  {Object}      error  error to be formatted
  * @return {GrampsError}        formatted GrAMPS error
  */
-const handleQueryErrors = error => {
+export const handleQueryErrors = error => {
   if (!error.isBoom) {
     // Check to make sure we don’t swallow GraphQL syntax errors, etc..
     return GrampsError({
