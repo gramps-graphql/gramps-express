@@ -6,12 +6,15 @@ import { grampsExpress } from '../index';
 
 const app = express();
 
+const enableMockData =
+  process.env.NODE_ENV !== 'production' && process.env.GRAMPS_MODE !== 'live';
+
 app.use(bodyParser.json());
 
 app.use(
   grampsExpress({
     dataSources: [],
-    enableMockData: process.env.NODE_ENV !== 'production',
+    enableMockData,
     extraContext: req => ({ req }),
   }),
 );
