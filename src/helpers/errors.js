@@ -47,6 +47,57 @@ const customErrorFields = [
 initSevenBoom([...customErrorFields]);
 
 /**
+ * Creates a custom error or wraps an existing error.
+ *
+ * @see https://github.com/GiladShoham/seven-boom
+ * @see https://github.com/hapijs/boom
+ *
+ * @param  {Object?}        config                 error configuration
+ * @param  {Error|boolean?} config.error           Error object to modify
+ * @param  {number?}        config.statusCode      HTTP status code (e.g. 404)
+ * @param  {Object?}        config.data            supplied data (e.g. vars)
+ * @param  {string?}        config.message         human-readable error message
+ * @param  {string?}        config.errorCode       custom error code
+ * @param  {string?}        config.graphqlModel    which GraphQL model errored
+ * @param  {string?}        config.targetEndpoint  where data was loaded from
+ * @param  {string?}        config.docsLink        link to help docs
+ * @return {Error}                                 SevenBoom error for output
+ */
+export function GrampsError(
+  {
+    error = false,
+    statusCode = false,
+    data = null,
+    message = '',
+    description = null,
+    errorCode = 'BLUEMIX_GRAPHQL_ERROR',
+    graphqlModel = null,
+    targetEndpoint = null,
+    docsLink = null,
+  } = {},
+) {
+  const httpErrorCode = statusCode || error.statusCode || 500;
+
+  // If we’re wrapping an error, the function and first three arguments change.
+  const fn = error ? 'wrap' : 'create';
+  const baseArgs = error
+    ? [error, httpErrorCode, message]
+    : [httpErrorCode, message, data];
+
+  // Add the custom arguments to the first three.
+  const args = baseArgs.concat([
+    description,
+    errorCode,
+    graphqlModel,
+    targetEndpoint,
+    docsLink,
+  ]);
+
+  // Call the function and spread the args array into individual arguments.
+  return SevenBoom[fn](...args);
+}
+
+/**
  * Builds a list of error details based on what details are available.
  *
  * For each available field, check if the error contains info that matches it.
@@ -61,6 +112,28 @@ const formatDetailsArray = (fields, error) =>
     .filter(field => field.name !== 'guid')
     .map(field => error[field.name] && `${field.label}: ${error[field.name]}`)
     .filter(field => !!field);
+
+/**
+ * Checks incoming errors to ensure the formatting is correct.
+ * @param  {Object}      error  error to be formatted
+ * @return {GrampsError}        formatted GrAMPS error
+ */
+const handleQueryErrors = error => {
+  if (!error.isBoom) {
+    // Check to make sure we don’t swallow GraphQL syntax errors, etc..
+    return GrampsError({
+      error,
+      errorCode: 'GRAPHQL_ERROR',
+      description: error.message,
+      data: {
+        locations: error.locations,
+        path: error.path,
+      },
+    });
+  }
+
+  return error;
+};
 
 /**
  * Accepts a SevenBoom error object and generates a formatted server log.
@@ -115,6 +188,9 @@ export const formatClientErrorData = error => {
     delete error.message;
   }
 
+  // To avoid escaped quotes, change them to single quotes.
+  error.description = error.description.replace(/"/g, "'");
+
   /* eslint-enable no-param-reassign */
 
   return error;
@@ -128,58 +204,8 @@ export const formatClientErrorData = error => {
 export const formatError = (logger = console) =>
   formatErrorGenerator({
     hooks: {
+      onOriginalError: handleQueryErrors,
       onProcessedError: printDetailedServerLog(logger),
       onFinalError: formatClientErrorData,
     },
   });
-
-/**
- * Creates a custom error or wraps an existing error.
- *
- * @see https://github.com/GiladShoham/seven-boom
- * @see https://github.com/hapijs/boom
- *
- * @param  {Object?}        config                 error configuration
- * @param  {Error|boolean?} config.error           Error object to modify
- * @param  {number?}        config.statusCode      HTTP status code (e.g. 404)
- * @param  {Object?}        config.data            supplied data (e.g. vars)
- * @param  {string?}        config.message         human-readable error message
- * @param  {string?}        config.errorCode       custom error code
- * @param  {string?}        config.graphqlModel    which GraphQL model errored
- * @param  {string?}        config.targetEndpoint  where data was loaded from
- * @param  {string?}        config.docsLink        link to help docs
- * @return {Error}                                 SevenBoom error for output
- */
-export function GrampsError(
-  {
-    error = false,
-    statusCode = false,
-    data = null,
-    message = '',
-    description = null,
-    errorCode = 'BLUEMIX_GRAPHQL_ERROR',
-    graphqlModel = null,
-    targetEndpoint = null,
-    docsLink = null,
-  } = {},
-) {
-  const httpErrorCode = statusCode || error.statusCode || 500;
-
-  // If we’re wrapping an error, the function and first three arguments change.
-  const fn = error ? 'wrap' : 'create';
-  const baseArgs = error
-    ? [error, httpErrorCode, message]
-    : [httpErrorCode, message, data];
-
-  // Add the custom arguments to the first three.
-  const args = baseArgs.concat([
-    description,
-    errorCode,
-    graphqlModel,
-    targetEndpoint,
-    docsLink,
-  ]);
-
-  // Call the function and spread the args array into individual arguments.
-  return SevenBoom[fn](...args);
-}

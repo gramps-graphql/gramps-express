@@ -91,7 +91,7 @@ export default function grampsExpress(
     req.gramps = {
       schema,
       context,
-      formatError,
+      formatError: formatError(logger),
       ...apolloOptions.graphqlExpress,
     };
 
