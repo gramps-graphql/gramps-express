@@ -20,4 +20,21 @@ describe('dev/server', () => {
   it('calls the listen method with the correct arguments', () => {
     expect(app.listen.mock.calls[0][0]).toBe(9999);
   });
+
+  it('correctly sets the mode based on the env', () => {
+    jest.resetModules();
+
+    process.env.NODE_ENV = 'production';
+
+    // eslint-disable-next-line global-require
+    const logger = require('../../src/lib/defaultLogger');
+    const spy = jest.spyOn(logger, 'info');
+
+    // eslint-disable-next-line global-require
+    require('../../src/dev/server');
+
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringMatching(/running in live mode/),
+    );
+  });
 });
