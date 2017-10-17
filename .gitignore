@@ -7,5 +7,4 @@ node_modules
 dist
 
 # Testing directories
-coverage/
-sonarlint.json
+coverage
