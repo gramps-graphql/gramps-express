@@ -2,5 +2,5 @@
 {% if include.type %}
   {% assign button_type = include.type %}
 {% endif %}
-<a href="{{ include.href }}"
+<a href="{{ site.github.url }}{{ include.href }}"
    class="u-button u-button--{{ button_type }}">{{ include.text }}</a>
