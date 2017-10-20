@@ -63,6 +63,12 @@ i {
   font-style: normal;
 }
 
+abbr {
+  border-bottom: 1px dotted var(--mid-gray);
+  cursor: help;
+  text-decoration: none;
+}
+
 pre {
   background: var(--pretty-much-black);
   padding: 1rem;
@@ -87,6 +93,7 @@ code {
     border: none;
     display: inline;
     font-size: 100%;
+    padding: 0;
   }
 
   strong & {
