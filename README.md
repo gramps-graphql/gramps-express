@@ -5,15 +5,21 @@
 
 **An easier way to manage the data sources powering your GraphQL server.**
 
-**GrAMPS** (short for **Gr**aphQL **A**pollo **M**icroservice **P**attern **S**erver) is middleware designed for [apollo-server-express](https://git.io/vd1wc)
-that allows data sources — a schema, resolvers, and data access model — to be 
-composed into a single GraphQL schema, while keeping the code within each data 
-source isolated, independently testable, and completely decoupled from the rest 
-of your application.
+**GrAMPS** (short for **Gr**aphQL **A**pollo **M**icroservice **P**attern **S**erver) is middleware designed for [apollo-server-express](https://git.io/vd1wc) that allows independent data sources — a schema, resolvers, and data access model — to be composed into a single GraphQL schema, while keeping the code within each data source isolated, independently testable, and completely decoupled from the rest of your application.
 
 ## Developer Quickstart
 
 [See the 5-minute quickstart in our documentation.](https://gramps-graphql.github.io/gramps-express/overview/quickstart/)
+
+## Why Does GrAMPS Exist?
+
+GrAMPS is an attempt to create a standard for organizing GraphQL data source repositories, which allows for multiple data sources to be composed together in a plugin-like architecture.
+
+The architecture of GrAMPS data sources was inspired by @helfer, who [suggested models and connectors as abstractions](https://dev-blog.apollodata.com/how-to-build-graphql-servers-87587591ded5) when designing GraphQL servers. GrAMPS expands on the original concept and provides a standard that makes separate codebases interoperable.
+
+The ability to combine independently managed data sources into a single GraphQL server is a core requirement for IBM Cloud’s microservice architecture. We have dozens of teams who expose data, so a single codebase with all GraphQL data sources inside was not an option; we needed a way to give each team control of their data while still maintaining the ability to simplify our data layer. 
+
+GrAMPS solves this problem by allowing each data source to be an independent repository/package that can be composed together into a single GraphQL server.
 
 ## What GrAMPS Can Do
 
@@ -21,13 +27,25 @@ of your application.
  -  Allow local development with optional local overrides of data sources
  -  Improve error reporting with optional error handling
 
-### Development
+### How GrAMPS Works
 1.  Import each GrAMPS data source as an npm package
 2.  Check for local data sources specified in `GQL_DATA_SOURCES` or in the 
     `--data-source-dir` argument to the CLI command `gramps`
 3.  Merge all GrAMPS data sources into a single GraphQL schema
 4.  Attach the combined schema and context to the Express request
 5.  Use the GrAMPS schema and context in `graphqlExpress` to start the server
+
+## Roadmap
+
+- [ ] Write a [data source](https://github.com/gramps-graphql/data-source-base) tutorial
+- [ ] Write a developer quickstart
+- [ ] Add API docs
+- [ ] Write docs about how error handling works
+- [ ] Add a Redis add-on
+- [ ] Add simpler cache key override
+- [ ] Define a pattern for direct database access
+- [ ] Add [all-contributors](https://github.com/kentcdodds/all-contributors)
+- [ ] Add integration test examples/docs with [Cypress](https://www.cypress.io/)
 
 ## Credits
 
