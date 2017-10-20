@@ -37,15 +37,15 @@ GrAMPS solves this problem by allowing each data source to be an independent rep
 
 ## Roadmap
 
-- [ ] Write a [data source](https://github.com/gramps-graphql/data-source-base) tutorial
-- [ ] Write a developer quickstart
-- [ ] Add API docs
-- [ ] Write docs about how error handling works
-- [ ] Add a Redis add-on
-- [ ] Add simpler cache key override
-- [ ] Define a pattern for direct database access
-- [ ] Add [all-contributors](https://github.com/kentcdodds/all-contributors)
-- [ ] Add integration test examples/docs with [Cypress](https://www.cypress.io/)
+- [ ] Write a [data source](https://github.com/gramps-graphql/data-source-base) tutorial (#21, WIP at #22)
+- [ ] Write a developer quickstart (#23)
+- [ ] Add API docs (#24)
+- [ ] Write docs about how error handling works (#25)
+- [ ] Add a Redis add-on (#26)
+- [ ] Add simpler cache key override (#27)
+- [ ] Define a pattern for direct database access (#28)
+- [ ] Add [all-contributors](https://github.com/kentcdodds/all-contributors) (#29)
+- [ ] Add integration test examples/docs with [Cypress](https://www.cypress.io/) (#30)
 
 ## Credits
 
