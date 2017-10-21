@@ -77,7 +77,8 @@ This time you’ll get back a response with live data!
 > frequently goes down. It’s 
 > [on our todo list](https://github.com/gramps-graphql/gramps-express/issues/31)
 > to update this tutorial with a more reliable data source. (Want to contribute?
-> We’d love to have you participate!)
+> We’d love to have you participate — 
+> [get involved](https://github.com/gramps-graphql/gramps-express/issues/31)!)
 
 ## Further Reading
 
