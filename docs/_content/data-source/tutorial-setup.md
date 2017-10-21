@@ -13,6 +13,7 @@ In this tutorial, we’re going to create a data source for [the IMDB API](http:
 -   [Create a Model]({{ site.github.url }}/data-source/tutorial-model)
 -   [Write a GraphQL Schema]({{ site.github.url }}/data-source/tutorial-schema)
 -   [Write Resolvers]({{ site.github.url }}/data-source/tutorial-resolvers)
+-   [Use Development Modes]({{ site.github.url }}/data-source/tutorial-dev)
 
 ## In This Section
 {:.no_toc}
@@ -53,6 +54,38 @@ yarn install
 
 [4]: https://yarnpkg.com
 
+## Update the Context Name for the Data Source
+
+In a GraphQL server, resolver functions receive what’s called a “context”, which is an object that contains whatever we, as developers, want to pass along to help resolve our queries. The most common use of this is to provide a means of loading data, which is referred to as a “model” in the GrAMPS ecosystem.
+
+Each GrAMPS data source will add its model to the context under a unique identifier, which we need to choose.
+
+Open `src/index.js` and update the context:
+
+```diff
+  import schema from './schema.graphql';
+  import resolvers from './resolvers';
+  import Connector from './connector';
+  import Model from './model';
+  
+  /*
+   * For more information on the main data source object, see
+   * https://ibm.biz/graphql-data-source-main
+   */
+  export default {
+-   // TODO: Rename the context to describe the data source.
+-   context: 'YourDataSource',
++   context: 'IMDBAPI',
+    model: new Model({ connector: new Connector() }),
+    schema,
+    resolvers,
+  };
+```
+
+> **NOTE:** In code examples, we show the diff of the changed file, which means
+> red lines are the original code that needs to be changed or removed, and 
+> green lines show the completed edits.
+
 ## Update package.json
 
 Before we work on the code itself, we need to do a little bit of housekeeping. First, let’s edit `package.json` to add the correct info about our new data source.
@@ -75,10 +108,6 @@ Before we work on the code itself, we need to do a little bit of housekeeping. F
     // ...
   }
 ```
-
-> **NOTE:** In code examples, we show the diff of the changed file, which means
-> red lines are the original code that needs to be changed, and green lines 
-> show the completed edits.
 
 ## Update the README
 
