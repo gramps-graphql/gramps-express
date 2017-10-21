@@ -13,6 +13,7 @@ Now that the [connector is ready]({{ site.github.url }}/data-source/tutorial-con
 -   **> [Create a Model]({{ site.github.url }}/data-source/tutorial-model)**
 -   [Write a GraphQL Schema]({{ site.github.url }}/data-source/tutorial-schema)
 -   [Write Resolvers]({{ site.github.url }}/data-source/tutorial-resolvers)
+-   [Use Development Modes]({{ site.github.url }}/data-source/tutorial-dev)
 
 ## In This Section
 {:.no_toc}
@@ -183,7 +184,7 @@ And let’s also make sure that our `getQueryString()` helper is dropping empty 
     });
 ```
 
-Finally, let’s make sure we get a [`GrampsError`]({{ site.github.url }}/api/errors#grampserror) if the request fails:
+Finally, let’s make sure we get a [`GrampsError`]({{ site.github.url }}/api/errors/#grampserrorerrordata) if the request fails:
 
 ```js
     it('throws a GrampsError if something goes wrong', async () => {

@@ -17,6 +17,7 @@ Now that we’ve [set up the data source]({{ site.github.url }}/data-source/tuto
 -   [Create a Model]({{ site.github.url }}/data-source/tutorial-model)
 -   [Write a GraphQL Schema]({{ site.github.url }}/data-source/tutorial-schema)
 -   [Write Resolvers]({{ site.github.url }}/data-source/tutorial-resolvers)
+-   [Use Development Modes]({{ site.github.url }}/data-source/tutorial-dev)
 
 ## In This Section
 {:.no_toc}
