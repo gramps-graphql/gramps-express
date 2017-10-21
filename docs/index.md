@@ -12,7 +12,7 @@ Check out the links below to get started.
 {% include banners-3-col.html
     b1_heading="Quickstart:<br>Up & Running in 5 Minutes"
     b1_button="Read the Quickstart"
-    b1_link="/intro/quickstart"
+    b1_link="/overview/quickstart"
     b1_icon="rocket"
 
     b2_heading="Data Sources:<br>Build Your First Data Source"
