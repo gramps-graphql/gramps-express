@@ -54,11 +54,11 @@ const warnInProduction = ({ sources, logger }) => {
     );
     const errorMessage = [
       '======================================================================',
-      '     ERROR: Do no use local GraphQL data sources in production.',
+      '     ERROR: Do not use local GraphQL data sources in production.',
       '',
       `     External source(s): ${externalSources.join(', ')}`,
       '',
-      '     See https://ibm.biz/graphql-data-source for details.',
+      '     See https://ibm.biz/gramps-data-source-tutorial for details.',
       '======================================================================',
     ].join(EOL);
 
@@ -90,7 +90,8 @@ const warnForOverrides = ({ overrides, logger }) => {
   }
 
   const message = [
-    `${EOL}========================= WARNING ==========================`,
+    EOL,
+    `========================= WARNING ==========================`,
     `     Existing data sources have been overridden by`,
     `     development-only data sources. This WILL NOT work`,
     `     in production environments.`,
@@ -99,7 +100,8 @@ const warnForOverrides = ({ overrides, logger }) => {
     `     - ${overrides.join(`${EOL}     - `)}`,
     ``,
     `     Details: https://ibm.biz/graphql-data-source`,
-    `============================================================${EOL}`,
+    `============================================================`,
+    EOL,
   ];
 
   logger.warn(message.join(EOL));

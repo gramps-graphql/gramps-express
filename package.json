@@ -79,7 +79,7 @@
       "lcov"
     ],
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "{src,bin}/**/*.js"
     ],
     "coverageThreshold": {
       "global": {

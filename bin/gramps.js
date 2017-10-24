@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+const EOL = require('os').EOL;
 const path = require('path');
 const chalk = require('chalk');
 const shell = require('shelljs');
@@ -40,15 +41,20 @@ const MOCK_DATA_ENV = 'mock';
  * @return {void}
  */
 function printDevWarning(srcDir, tmpDir) {
-  const red = chalk.red.bold;
-  shell.echo(red('\n======================= IMPORTANT ======================'));
-  shell.echo(red('   External data sources are for development only'));
-  shell.echo(red('   and WILL NOT work in a live environment. For info'));
-  shell.echo(red('   on putting your data source in production, see'));
-  shell.echo(red('   the docs at https://ibm.biz/graphql-data-source'));
-  shell.echo(red('========================================================\n'));
+  const message = [
+    EOL,
+    '======================= IMPORTANT ======================',
+    '   Local data sources are for development only and',
+    '   WILL NOT work in a live environment. For info on',
+    '   putting your data source in production, see the',
+    '   docs: https://ibm.biz/gramps-data-source-tutorial',
+    '========================================================',
+    EOL,
+  ].join(EOL);
+
+  shell.echo(chalk.red.bold(message));
   shell.echo(chalk.dim(`Source: ${srcDir}`));
-  shell.echo(chalk.dim(`Compiled: ${tmpDir}\n`));
+  shell.echo(chalk.dim(`Compiled: ${tmpDir}${EOL}`));
 }
 
 /**
@@ -95,6 +101,20 @@ function transpileJS(fileGlob, targetDir) {
 }
 
 /**
+ * Creates a symlink to the `node_modules` folder so dependencies are available.
+ * @param  {String} srcDir  the location of the source files
+ * @param  {String} tmpDir  the location of the temporary data source files
+ * @return {void}
+ */
+function symlinkNodeModules(srcDir, tmpDir) {
+  shell.ln(
+    '-s',
+    path.join(srcDir, 'node_modules'),
+    path.join(tmpDir, 'node_modules'),
+  );
+}
+
+/**
  * Preps and saves a data source in a temp directory, and returns the temp path.
  * @param  {string} rootDir         GraphQL µ-service root directory
  * @param  {string} relativeSrcDir  relative path to a data source directory
@@ -118,18 +138,18 @@ function getDataSource(rootDir, relSrcDir) {
   makeTmpDir(tmpDir);
   copyGQL(path.join(srcDir, '{src,}/*.graphql'), tmpDir);
   transpileJS(path.join(srcDir, '{src,}/*.js'), tmpDir);
+  symlinkNodeModules(srcDir, tmpDir);
 
-  shell.echo(chalk.bold('\r\nWe’ve got ourselves a data source, folks.'));
-  shell.echo(chalk.bold('Who’s ready to party? 🎉'));
+  shell.echo(chalk.bold(`${EOL}We’ve got ourselves a data source, folks. 🎉`));
 
   return `GQL_DATA_SOURCES=${tmpDir}`;
 }
 
-// Get the full path to the GraphQL µ-service root directory
+// Get the full path to the GrAMPS root directory
 const rootDir = path.resolve(__dirname, '..');
 const env = argv.live ? LIVE_DATA_ENV : MOCK_DATA_ENV;
 const source = getDataSource(rootDir, argv.dataSourceDir);
 
-// Move into the root Node directory and start the service.
+// Move into the GrAMPS root and start the service.
 shell.cd(rootDir);
 shell.exec(`${source} GRAMPS_MODE=${env} node dist/dev/server.js`);
