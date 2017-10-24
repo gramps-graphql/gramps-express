@@ -28,6 +28,7 @@
     "lint": "eslint src/**/*.js",
     "test": "npm run lint --silent && npm run test:unit --silent",
     "test:unit": "NODE_ENV=test LOG4JS_LEVEL='OFF' jest --coverage",
+    "example:simple": "BABEL_DISABLE_CACHE=1 nodemon -e js,json,graphql examples/simple.js --exec babel-node",
     "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post"
   },
   "dependencies": {
