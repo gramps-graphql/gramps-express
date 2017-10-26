@@ -11,21 +11,21 @@ const enableMockData =
 
 app.use(bodyParser.json());
 
-app.use(
-  grampsExpress({
-    dataSources: [],
-    enableMockData,
-    extraContext: req => ({ req }),
-  }),
-);
-
+const { fromRequestContext } = grampsExpress({
+  dataSources: [],
+  enableMockData,
+  extraContext: req => ({ req }),
+});
 app.all(
   '/graphql',
-  graphqlExpress(req => ({
-    schema: req.gramps.schema,
-    context: req.gramps.context,
-    formatError: req.gramps.formatError,
-  })),
+  graphqlExpress(req => {
+    const gramps = fromRequestContext(req, req.res);
+    return {
+      schema: gramps.schema,
+      context: gramps.context,
+      formatError: gramps.formatError,
+    };
+  }),
 );
 
 app.get(

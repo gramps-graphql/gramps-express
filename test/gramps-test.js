@@ -10,6 +10,28 @@ describe('GrAMPS', () => {
     jest.clearAllMocks();
   });
 
+  describe('non-middleware usage', () => {
+    it('properly configures a schema when called with no options', () => {
+      const mockReq = {};
+      const gramps = grampsExpress().fromRequestContext(mockReq, {});
+
+      expect(cfg.addMockFunctions).toHaveBeenCalled();
+      expect(cfg.getSchema).toHaveBeenCalledWith({
+        sources: [],
+        logger: console,
+        options: {},
+      });
+
+      expect(gramps).toEqual(
+        expect.objectContaining({
+          context: {},
+          formatError: expect.any(Function),
+          schema: expect.any(Object),
+        }),
+      );
+    });
+  });
+
   describe('grampsExpress()', () => {
     it('properly configures a schema when called with no options', () => {
       /*

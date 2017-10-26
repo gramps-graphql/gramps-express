@@ -79,7 +79,7 @@ export default function grampsExpress(
     });
   }
 
-  return (req, res, next) => {
+  function fromRequestContext(req, res) {
     const context = sources.reduce(
       (models, source) => ({
         ...models,
@@ -88,13 +88,18 @@ export default function grampsExpress(
       extraContext(req, res),
     );
 
-    req.gramps = {
+    return {
       schema,
       context,
       formatError: formatError(logger),
       ...apolloOptions.graphqlExpress,
     };
+  }
 
+  const middleware = (req, res, next) => {
+    req.gramps = fromRequestContext(req, res);
     next();
   };
+
+  return Object.assign(middleware, { fromRequestContext });
 }
