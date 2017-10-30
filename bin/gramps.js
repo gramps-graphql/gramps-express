@@ -122,7 +122,7 @@ function getDataSource(rootDir, relSrcDir) {
   shell.echo(chalk.bold('\r\nWe’ve got ourselves a data source, folks.'));
   shell.echo(chalk.bold('Who’s ready to party? 🎉'));
 
-  return `GQL_DATA_SOURCES=${tmpDir}`;
+  return tmpDir;
 }
 
 // Get the full path to the GraphQL µ-service root directory
@@ -132,4 +132,6 @@ const source = getDataSource(rootDir, argv.dataSourceDir);
 
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
-shell.exec(`${source} GRAMPS_MODE=${env} node dist/dev/server.js`);
+shell.exec(`node dist/dev/server.js`, {
+  env: { GRAMPS_MODE: env, GQL_DATA_SOURCES: source },
+});
