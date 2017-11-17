@@ -133,5 +133,8 @@ const source = getDataSource(rootDir, argv.dataSourceDir);
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
 shell.exec(`node dist/dev/server.js`, {
-  env: { GRAMPS_MODE: env, GQL_DATA_SOURCES: source },
+  env: Object.assign({}, process.env, {
+    GRAMPS_MODE: env,
+    GQL_DATA_SOURCES: source,
+  }),
 });
