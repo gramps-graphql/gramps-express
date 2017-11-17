@@ -202,6 +202,22 @@ describe('GraphQLConnector', () => {
         'https://example.com/test/endpoint',
       ]);
     });
+
+    it.skip('uses the DataLoader to eliminate redundant requests', async () => {
+      const tc = new TestConnector();
+
+      tc.apiBaseUri = 'https://example.com';
+
+      tc.load = jest.fn(() => Promise.resolve([{}]));
+
+      await tc.get('/test/endpoint');
+      await tc.get('/test/endpoint');
+
+      expect(tc.load).toHaveBeenCalledTimes(1);
+      expect(tc.load).toHaveBeenCalledWith([
+        'https://example.com/test/endpoint',
+      ]);
+    });
   });
 
   describe('post()', () => {
