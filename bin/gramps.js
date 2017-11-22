@@ -121,7 +121,10 @@ function getDataSource(parentTmpDir, relSrcDir, idx) {
   }
 
   const srcDir = path.join(process.cwd(), relSrcDir);
-  const tmpDir = path.join(parentTmpDir, '.tmp' + (idx === 0 ? "" : idx.toString()));
+  const tmpDir = path.join(
+    parentTmpDir,
+    '.tmp' + (idx === 0 ? '' : idx.toString()),
+  );
 
   shell.echo(`Loading ${srcDir}`);
 
@@ -138,12 +141,14 @@ function getDataSource(parentTmpDir, relSrcDir, idx) {
 
 // Get the full path to the GraphQL µ-service root directory
 const rootDir = path.resolve(__dirname, '..');
-const parentTmpDir = path.join(rootDir, '.tmp')
-cleanMakeTmpDir(parentTmpDir)
+const parentTmpDir = path.join(rootDir, '.tmp');
+cleanMakeTmpDir(parentTmpDir);
 
 const env = argv.live ? LIVE_DATA_ENV : MOCK_DATA_ENV;
 let sourceDirs = argv.dataSourceDir.split(',').map(path => path.trim());
-const sources = sourceDirs.map((path, idx) => getDataSource(parentTmpDir, path, idx)).join(',');
+const sources = sourceDirs
+  .map((path, idx) => getDataSource(parentTmpDir, path, idx))
+  .join(',');
 
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
