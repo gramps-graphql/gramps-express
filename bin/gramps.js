@@ -6,14 +6,15 @@ const shell = require('shelljs');
 const globby = require('globby');
 const babel = require('babel-core');
 const argv = require('yargs')
-  .group('data-source-dir', 'Register a data source for mock development:')
+  .group('data-source-dir', 'Register data sources for mock development:')
   .options({
     'data-source-dir': {
       alias: 'd',
-      description: 'path to a data source directory',
+      description: 'comma delimited paths to the data source directories',
       default: '',
     },
   })
+  .alias('data-source-dir', 'data-source-dirs')
   .group(['live', 'mock'], 'Choose real or mock data:')
   .options({
     live: {
@@ -52,11 +53,21 @@ function printDevWarning(srcDir, tmpDir) {
 }
 
 /**
- * Creates an empty temporary directory and returns the path.
+ * Creates an empty temporary directory.
  * @param  {string} tmpDir  path to the temporary directory
  * @return {void}
  */
 function makeTmpDir(tmpDir) {
+  shell.mkdir(tmpDir);
+  shell.echo(chalk.dim(' -> created an empty temporary directory'));
+}
+
+/**
+ * Creates an empty temporary directory. Removes existing.
+ * @param  {string} tmpDir  path to the temporary directory
+ * @return {void}
+ */
+function cleanMakeTmpDir(tmpDir) {
   shell.echo(chalk.dim(' -> emptying the temporary directory...'));
   shell.rm('-rf', tmpDir);
   shell.mkdir(tmpDir);
@@ -96,11 +107,11 @@ function transpileJS(fileGlob, targetDir) {
 
 /**
  * Preps and saves a data source in a temp directory, and returns the temp path.
- * @param  {string} rootDir         GraphQL µ-service root directory
+ * @param  {string} parentTmpDir    The temporary directory within GraphQL µ-service root directory
  * @param  {string} relativeSrcDir  relative path to a data source directory
  * @return {string}                 env var if set, otherwise an empty string
  */
-function getDataSource(rootDir, relSrcDir) {
+function getDataSource(parentTmpDir, relSrcDir, idx) {
   if (!relSrcDir || !shell.test('-d', relSrcDir)) {
     if (relSrcDir) {
       shell.echo(chalk.red.bold(`Data source ${relSrcDir} does not exist.`));
@@ -110,7 +121,10 @@ function getDataSource(rootDir, relSrcDir) {
   }
 
   const srcDir = path.join(process.cwd(), relSrcDir);
-  const tmpDir = path.join(rootDir, '.tmp');
+  const tmpDir = path.join(
+    parentTmpDir,
+    '.tmp' + (idx === 0 ? '' : idx.toString()),
+  );
 
   shell.echo(`Loading ${srcDir}`);
 
@@ -127,14 +141,20 @@ function getDataSource(rootDir, relSrcDir) {
 
 // Get the full path to the GraphQL µ-service root directory
 const rootDir = path.resolve(__dirname, '..');
+const parentTmpDir = path.join(rootDir, '.tmp');
+cleanMakeTmpDir(parentTmpDir);
+
 const env = argv.live ? LIVE_DATA_ENV : MOCK_DATA_ENV;
-const source = getDataSource(rootDir, argv.dataSourceDir);
+let sourceDirs = argv.dataSourceDir.split(',').map(path => path.trim());
+const sources = sourceDirs
+  .map((path, idx) => getDataSource(parentTmpDir, path, idx))
+  .join(',');
 
 // Move into the root Node directory and start the service.
 shell.cd(rootDir);
 shell.exec(`node dist/dev/server.js`, {
   env: Object.assign({}, process.env, {
     GRAMPS_MODE: env,
-    GQL_DATA_SOURCES: source,
+    GQL_DATA_SOURCES: sources,
   }),
 });
