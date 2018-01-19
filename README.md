@@ -1,4 +1,4 @@
-**NOTE:** There is an updated version of GrAMPS that supports all server implementations that Apollo Server can handle. To check it out, visit https://github.com/gramps-graphql/gramps.
+**NOTE:** The GrAMPS core has been updated to support all server implementations supported by Apollo Server, plus extra tools to make it usable with other GraphQL frameworks. To reflect its flexibility, GrAMPS has been moved to https://github.com/gramps-graphql/gramps.
 
 <a href="https://gramps.js.org/"><img src="https://gramps.js.org/assets/img/gramps-banner.png" alt="GrAMPS · An easier way to manage the data sources powering your GraphQL server" width="450"></a>
 
