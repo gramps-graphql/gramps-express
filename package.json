@@ -70,7 +70,7 @@
     "jest": "^21.2.1",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
-    "semantic-release": "^8.0.3",
+    "semantic-release": "^15.12.5",
     "supertest": "^3.0.0"
   },
   "jest": {
