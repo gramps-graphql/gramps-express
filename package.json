@@ -66,7 +66,7 @@
     "eslint-plugin-import": "^2.3.0",
     "eslint-plugin-prettier": "^2.1.2",
     "graphql-tools": "^2.5.0",
-    "husky": "^0.14.3",
+    "husky": "^4.2.4",
     "jest": "^21.2.1",
     "nodemon": "^1.11.0",
     "prettier": "^1.5.3",
