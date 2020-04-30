@@ -28,7 +28,9 @@
     "lint": "eslint src/**/*.js",
     "test": "npm run lint --silent && npm run test:unit --silent",
     "test:unit": "cross-env NODE_ENV=test LOG4JS_LEVEL='OFF' jest --coverage",
-    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish --access public && semantic-release post",
+    "snyk-protect": "snyk protect",
+    "prepare": "yarn run snyk-protect"
   },
   "dependencies": {
     "babel-core": "^6.24.1",
@@ -42,7 +44,8 @@
     "request-promise": "^4.2.1",
     "shelljs": "^0.7.8",
     "uuid": "^3.1.0",
-    "yargs": "^9.0.1"
+    "yargs": "^9.0.1",
+    "snyk": "^1.316.1"
   },
   "peerDependencies": {
     "apollo-server-express": "^1.1.2",
@@ -102,5 +105,6 @@
   "keywords": [
     "graphql",
     "apollo"
-  ]
+  ],
+  "snyk": true
 }
